@@ -1,30 +1,15 @@
-from brutils import is_valid_cpf
-from faker import Faker
+from brutils import generate_cpf
 
-fake = Faker('pt_BR')
+def gerar_cpfs_validos(qtd, arquivo="cpfs_validos.txt"):
+    cpfs_gerados = set()
+    with open(arquivo, "a") as f:
+        while len(cpfs_gerados) < qtd:
+            cpf = generate_cpf()
+            if cpf not in cpfs_gerados:
+                cpfs_gerados.add(cpf)
+                f.write(cpf + "\n")
+                print(f"CPF válido gerado: {cpf}")
 
-def linha():
-    print("-" * 60)
+    print(f"\n{qtd} CPFs válidos gerados e salvos em '{arquivo}'")
 
-def gerar_cpf():
-    cpf = fake.cpf()
-    print(f"CPF: {cpf}")
-
-def verificar_cpf():
-    cpf = input("Digite o CPF para verificar: \n")
-    if is_valid_cpf(cpf):
-        print("CPF validado!")
-    else:
-        print("CPF inválido!")
-
-while True:
-    linha()
-    opcao = input("Digite (1) para gerar CPF, ou (2) para verificar CPF: \n")
-    linha()
-    if opcao == "1":
-        gerar_cpf()
-    elif opcao == "2":
-        verificar_cpf()
-    else:
-        print("Opção inválida")
-        break
+gerar_cpfs_validos(1)
